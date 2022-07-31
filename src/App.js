@@ -11,7 +11,7 @@ class App extends React.Component {
     this.state= {
       locationName : '',
       allOutputs : {},
-     
+    //  location:'',
 
     }
   }
@@ -21,9 +21,9 @@ viewLocation = async (event) => {
 
   event.preventDefault();
   await this.setState({locationName:event.target.Cityname.value});
-  let url = `https://eu1.locationiq.com/v1/search?key=pk.5d691d1ba33a075816f6f0d0a8c4157d&q=${this.state.locationName}&format=json`;
+  let url = `https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_KEY}&q=${this.state.locationName}&format=json`;
   let response =await axios.get(url);
-  console.log(response);
+  // console.log(response);
   this.setState({allOutputs:response.data[0]})
 
 }
@@ -52,7 +52,7 @@ render() {
     <p> Longitude :{this.state.allOutputs.lon}</p>
     <br>
   </br>
-  <img src={`https://maps.locationiq.com/v3/staticmap?key=pk.5d691d1ba33a075816f6f0d0a8c4157d&center=${this.state.allOutputs.lat},${this.state.allOutputs.lon}&zoom=10`} alt='here we are'/>
+  <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_KEY}&center=${this.state.allOutputs.lat},${this.state.allOutputs.lon}&zoom=10`} alt='here we are'/>
   </>
     
     
