@@ -40,7 +40,7 @@ render() {
           <Form.Control type="text" name="Cityname" placeholder="Enter Place" />
         </Form.Group>
         <Button variant="primary" type="submit">
-            Travel!
+           Explore!
         </Button>
       </Form>
     <br>
