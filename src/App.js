@@ -11,7 +11,7 @@ class App extends React.Component {
     this.state= {
       locationName : '',
       allOutputs : {},
-     
+     location:'',
 
     }
   }
@@ -23,7 +23,7 @@ viewLocation = async (event) => {
   await this.setState({locationName:event.target.Cityname.value});
   let url = `https://eu1.locationiq.com/v1/search?key=pk.5d691d1ba33a075816f6f0d0a8c4157d&q=${this.state.locationName}&format=json`;
   let response =await axios.get(url);
-  console.log(response);
+  // console.log(response);
   this.setState({allOutputs:response.data[0]})
 
 }
