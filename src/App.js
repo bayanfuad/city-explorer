@@ -1,74 +1,79 @@
-import React from 'react'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+ 
+import React from 'react';
+import SearchForm from './component/SearchForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Header from './component/Header';
 import axios from 'axios';
-
+import DisplayedInfo from './component/DisplayedInfo';
+import Map from './component/Map';
 
 class App extends React.Component {
+
+
   constructor(props) {
     super(props)
     this.state= {
-      locationName : '',
-      allOutputs : {},
-    //  location:'',
-
+      cityName :'',
+      latitude :'',
+      longitude :'',
+      imgSrc : '',
+      showData : false,
+      showErr:false,
     }
   }
-  
 
-viewLocation = async (event) => {
+  displayLocation = async (event) => {
+    event.preventDefault();
+    let userInput = event.target.nameField.value;
+    let requestUrl = `https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_KEY}&q=${userInput}&format=json`;
 
-  event.preventDefault();
-  await this.setState({locationName:event.target.Cityname.value});
-  let url = `https://eu1.locationiq.com/v1/search?key=${process.env.REACT_APP_KEY}&q=${this.state.locationName}&format=json`;
-  let response =await axios.get(url);
-  // console.log(response);
-  this.setState({allOutputs:response.data[0]})
+    try {
+      let responseFromIQ = await axios.get(requestUrl);
+      let cityData = responseFromIQ.data[0];
+      this.displayMap(cityData.lat,cityData.lon);
+      this.setState({
+        cityName:cityData.display_name,
+        latitude:cityData.lat,
+        longitude:cityData.lon,
+        showData : true,
+        showErr : false,
+        });
+    }catch (error){
 
-}
+      this.setState({
+        showData : false,
+        showErr : true,
+        });
+    }
 
 
-render() {
-  return (
-  <>
-    <div>
-      <h1>City Explorer</h1>
+  }
 
-      <Form onSubmit={this.viewLocation}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Control type="text" name="Cityname" placeholder="Enter Place" />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-           Explore!
-        </Button>
-      </Form>
-    <br>
-    </br>
-   
-    <>
-    <p> Place Name : {this.state.allOutputs.display_name}</p>
-    <p> Latitude : {this.state.allOutputs.lat}</p>
-    <p> Longitude :{this.state.allOutputs.lon}</p>
-    <br>
-  </br>
-  <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_KEY}&center=${this.state.allOutputs.lat},${this.state.allOutputs.lon}&zoom=10`} alt='here we are'/>
-  </>
-    
-    
+ 
 
-    </div>
-    </>
-  )
-}
+  displayMap = (lat,lon) => {
+    let requestMapUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_KEY}&center=${lat},${lon}&zoom=10`;
+    this.setState({imgSrc : requestMapUrl});
+
+  }
+
+  render() {
+
+    return (
+      <>
+        <Header/>
+        <SearchForm display={this.displayLocation}/>
+
+        { this.state.showData &&
+        <>
+        <DisplayedInfo name={this.state.cityName} lat={this.state.latitude} lon={this.state.longitude} />
+        <Map source={this.state.imgSrc}/>
+        </>
+        }
+        {this.state.showErr && <p>City Not Found</p>}
+      </>
+    )
+  }
 }
 
 export default App;
-
-  
-  
-  
-  
-  
-  
-
