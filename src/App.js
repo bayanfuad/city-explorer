@@ -1,11 +1,14 @@
- 
-import React from 'react';
-import SearchForm from './component/SearchForm';
+import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './component/Header';
 import axios from 'axios';
+import SearchForm from './component/SearchForm';
+import Header from './component/Header';
 import DisplayedInfo from './component/DisplayedInfo';
 import Map from './component/Map';
+import './App.css';
+import Weather from './component/Weather';
+
+
 
 class App extends React.Component {
 
@@ -19,6 +22,8 @@ class App extends React.Component {
       imgSrc : '',
       showData : false,
       showErr:false,
+      weather : [],
+      showWeather : false,
     }
   }
 
@@ -31,6 +36,7 @@ class App extends React.Component {
       let responseFromIQ = await axios.get(requestUrl);
       let cityData = responseFromIQ.data[0];
       this.displayMap(cityData.lat,cityData.lon);
+      this.displayWeather(userInput,cityData.lat,cityData.lon)
       this.setState({
         cityName:cityData.display_name,
         latitude:cityData.lat,
@@ -45,8 +51,8 @@ class App extends React.Component {
         showErr : true,
         });
     }
-
-
+    
+      
   }
 
  
@@ -54,26 +60,43 @@ class App extends React.Component {
   displayMap = (lat,lon) => {
     let requestMapUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_KEY}&center=${lat},${lon}&zoom=10`;
     this.setState({imgSrc : requestMapUrl});
+  
+  }
+
+  displayWeather = async (searchQuery,lat,lon) => {
+
+    try {
+      let serverData = await axios.get(`${process.env.REACT_APP_API}/weather?searchQuery=${searchQuery}&lat=${lat}&lon=${lon}`);
+      let weatherData = serverData.data;
+      this.setState({weather:weatherData , showWeather : true});
+    }catch(error) {
+      console.log(error);
+      this.setState({ showWeather : false});
+    }
+
+
 
   }
 
   render() {
 
     return (
-      <>
+      < div className='App'>
         <Header/>
+        <br></br>
         <SearchForm display={this.displayLocation}/>
-
-        { this.state.showData &&
+        {this.state.showData &&
         <>
         <DisplayedInfo name={this.state.cityName} lat={this.state.latitude} lon={this.state.longitude} />
-        <Map source={this.state.imgSrc}/>
-        </>
-        }
-        {this.state.showErr && <p>City Not Found</p>}
-      </>
+        <Map  className='pic' source={this.state.imgSrc}/>
+        
+        </>}
+         { this.state.showWeather && <Weather weatherData={this.state.weather}/> }
+        {this.state.showErr && <p>Not valid Value </p>}
+      </div>
     )
   }
 }
 
 export default App;
+
