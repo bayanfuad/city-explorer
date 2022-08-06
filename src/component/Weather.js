@@ -1,6 +1,6 @@
-import react from 'react'
+import React from 'react'
 
-class Weather extends react.Component {
+class Weather extends React.Component {
 
   render() {
     return (
@@ -18,8 +18,4 @@ class Weather extends react.Component {
   }
 }
 
-
-export default Weather
-
 export default Weather;
-

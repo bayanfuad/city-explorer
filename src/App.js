@@ -1,20 +1,14 @@
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
+ 
+import React from 'react';
 import SearchForm from './component/SearchForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './component/Header';
+import axios from 'axios';
 import DisplayedInfo from './component/DisplayedInfo';
 import Map from './component/Map';
-
 import Movie from './component/Movie';
 import './App.css';
 import Weather from './component/Weather';
-
-import './App.css';
-import Weather from './component/Weather';
-
-
-
 
 class App extends React.Component {
 
@@ -30,11 +24,8 @@ class App extends React.Component {
       showErr:false,
       weather : [],
       showWeather : false,
-
       movie : [],
       showMovie : false,
-
-
 
 
     }
@@ -51,9 +42,7 @@ class App extends React.Component {
       console.log(cityData);
       this.displayMap(cityData.lat,cityData.lon);
       this.displayWeather(userInput,cityData.lat,cityData.lon)
-
       this.displayMovie(userInput);
-
       this.setState({
         cityName:cityData.display_name,
         latitude:cityData.lat,
@@ -79,22 +68,6 @@ class App extends React.Component {
     this.setState({imgSrc : requestMapUrl});
   
   }
-
-
-
-  displayWeather = async (searchQuery,lat,lon) => {
-
-    try {
-      let serverData = await axios.get(`${process.env.REACT_APP_API}/weather?searchQuery=${searchQuery}&lat=${lat}&lon=${lon}`);
-      let weatherData = serverData.data;
-      this.setState({weather:weatherData , showWeather : true});
-    }catch(error) {
-      console.log(error);
-      this.setState({ showWeather : false});
-    }
-
-
-
 
   displayWeather = async (searchQuery,lat,lon) => {
 
@@ -137,14 +110,9 @@ class App extends React.Component {
         <Map  className='pic' source={this.state.imgSrc}/>
         
         </>}
-
         { this.state.showWeather && <Weather weatherData={this.state.weather}/> }
         { this.state.showMovie && <Movie movieData={this.state.movie}/>}
         {this.state.showErr && <p>Enter valid Value Please</p>}
-
-         { this.state.showWeather && <Weather weatherData={this.state.weather}/> }
-        {this.state.showErr && <p>Not valid Value </p>}
-
       </div>
     )
   }
@@ -152,4 +120,3 @@ class App extends React.Component {
 
 
 export default App;
-
