@@ -31,6 +31,7 @@ Finish time: __12:00am___
 Actual time needed to complete: _10 hours____
 
 
+
 Name of feature: ___________APIs_____________________
 
 Estimate of time needed to complete: __5 hours___
@@ -40,3 +41,49 @@ Start time: __9:00am___
 Finish time: _3:00pm____
 
 Actual time needed to complete: ___6 hours__
+
+
+**Author**: Bayan Fuad Aljawawdeh
+**Version**: 2.0.0 
+
+## Overview 
+
+We need to create and build our own server and connect it with App we create to the data from our server.
+link the server with the app to send the data.
+
+## Getting Started
+
+install libraries.
+create the server.
+link the server with the app to send the data.
+
+## Architecture  
+
+-ReactJS
+-Bootstrap
+-Axios
+-LocationIQ
+-Dotenv
+
+## Change Log
+
+Application now has a fully-functional search with a GET route for the location resource and displays map image and an error.
+
+## Credit and Collaborations
+
+thanks for my group Qais and Shaimaa for the help.
+[Shaimaa](https://github.com/Shaima-Alkhateeb)
+[Qais](https://github.com/qais-alsgher)
+
+
+
+Name of feature: __Custom Servers with Node and Express____________________
+
+Estimate of time needed to complete: __7hours___
+
+Start time: __2:00pm___
+
+Finish time: __12:00am___
+
+Actual time needed to complete: _10 hours____
+

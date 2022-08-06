@@ -18,4 +18,8 @@ class Weather extends react.Component {
   }
 }
 
+
 export default Weather
+
+export default Weather;
+
