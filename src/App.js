@@ -6,6 +6,9 @@ import Header from './component/Header';
 import axios from 'axios';
 import DisplayedInfo from './component/DisplayedInfo';
 import Map from './component/Map';
+import Movie from './component/Movie';
+import './App.css';
+import Weather from './component/Weather';
 
 class App extends React.Component {
 
@@ -19,6 +22,12 @@ class App extends React.Component {
       imgSrc : '',
       showData : false,
       showErr:false,
+      weather : [],
+      showWeather : false,
+      movie : [],
+      showMovie : false,
+
+
     }
   }
 
@@ -30,7 +39,10 @@ class App extends React.Component {
     try {
       let responseFromIQ = await axios.get(requestUrl);
       let cityData = responseFromIQ.data[0];
+      console.log(cityData);
       this.displayMap(cityData.lat,cityData.lon);
+      this.displayWeather(userInput,cityData.lat,cityData.lon)
+      this.displayMovie(userInput);
       this.setState({
         cityName:cityData.display_name,
         latitude:cityData.lat,
@@ -45,8 +57,8 @@ class App extends React.Component {
         showErr : true,
         });
     }
-
-
+    
+      
   }
 
  
@@ -54,26 +66,57 @@ class App extends React.Component {
   displayMap = (lat,lon) => {
     let requestMapUrl = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_KEY}&center=${lat},${lon}&zoom=10`;
     this.setState({imgSrc : requestMapUrl});
-
+  
   }
+
+  displayWeather = async (searchQuery,lat,lon) => {
+
+    try {
+      let serverData = await axios.get(`${process.env.REACT_APP_API}/weather?searchQuery=${searchQuery}&lat=${lat}&lon=${lon}`);
+      let weatherData = serverData.data;
+      this.setState({weather:weatherData , showWeather : true});
+    }catch(error) {
+      console.log(error);
+      this.setState({ showWeather : false});
+    }
+  }
+
+
+  displayMovie = async (searchQuery) =>{
+
+    try {
+      let Movie = await axios.get(`${process.env.REACT_APP_API}/movie?searchQuery=${searchQuery}`);
+      let  MovieData = Movie.data;
+      this.setState({movie : MovieData , showMovie : true});
+
+    }catch(error) {
+      console.log(error);
+      this.setState({ showMovie: false});
+    }
+  }
+
+
 
   render() {
 
     return (
-      <>
+      < div className='App'>
         <Header/>
+        <br></br>
         <SearchForm display={this.displayLocation}/>
-
-        { this.state.showData &&
+        {this.state.showData &&
         <>
         <DisplayedInfo name={this.state.cityName} lat={this.state.latitude} lon={this.state.longitude} />
-        <Map source={this.state.imgSrc}/>
-        </>
-        }
-        {this.state.showErr && <p>City Not Found</p>}
-      </>
+        <Map  className='pic' source={this.state.imgSrc}/>
+        
+        </>}
+        { this.state.showWeather && <Weather weatherData={this.state.weather}/> }
+        { this.state.showMovie && <Movie movieData={this.state.movie}/>}
+        {this.state.showErr && <p>Enter valid Value Please</p>}
+      </div>
     )
   }
 }
+
 
 export default App;
