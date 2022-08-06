@@ -87,3 +87,24 @@ Finish time: __12:00am___
 
 Actual time needed to complete: _10 hours____
 
+
+Estimate of time needed to complete: _Refactoring into Modules____
+
+Start time: ___8:00pm__
+
+Finish time: _9:00pm____
+
+Actual time needed to complete: __1 hour___
+
+
+
+Estimate of time needed to complete: _Refactoring into Modules____
+
+Start time: ___9:00pm__
+
+Finish time: _9:20pm____
+
+Actual time needed to complete: __20 mins___
+
+
+
